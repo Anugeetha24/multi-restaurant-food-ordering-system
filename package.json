@@ -1,0 +1,9 @@
+{
+  "name": "mini-project-3-year",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "install:frontend": "npm --prefix frontend install"
+  }
+}
