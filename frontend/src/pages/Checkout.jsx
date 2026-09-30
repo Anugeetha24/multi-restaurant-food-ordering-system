@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import CartContext from '../context/CartContext';
 import AuthContext from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import PaymentMethodSelector from '../components/PaymentMethodSelector';
 
@@ -35,7 +35,6 @@ const Checkout = () => {
         amount: 0,
         message: ''
     });
-    const [countdown, setCountdown] = useState(4);
     const [isRazorpayReady, setIsRazorpayReady] = useState(false);
     const isMockPayment = import.meta.env.VITE_PAYMENT_MODE !== 'live';
 
@@ -55,34 +54,6 @@ const Checkout = () => {
             document.body.removeChild(script);
         };
     }, []);
-
-    // Countdown and redirect effect for payment success
-    useEffect(() => {
-        if (!paymentResult.visible) return;
-
-        setCountdown(4);
-        const timer = setInterval(() => {
-            setCountdown((prev) => {
-                if (prev <= 1) {
-                    clearInterval(timer);
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-
-        const redirectTimer = setTimeout(() => {
-            setPaymentResult((prev) => ({ ...prev, visible: false }));
-            if (paymentResult.success) {
-                navigate('/orders');
-            }
-        }, 4000);
-
-        return () => {
-            clearInterval(timer);
-            clearTimeout(redirectTimer);
-        };
-    }, [paymentResult.visible, navigate, paymentResult.success]);
 
     const total = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
     const deliveryFee = 40;
@@ -132,15 +103,7 @@ const Checkout = () => {
         const config = { headers: { Authorization: `Bearer ${authUser.token}` } };
         await createOrdersAfterPayment(paymentId, config);
         clearCart();
-
-        setPaymentResult({
-            visible: true,
-            success: true,
-            paymentId,
-            orderId,
-            amount: finalTotal,
-            message: `${method.toUpperCase()} payment successful! Redirecting to your orders...`
-        });
+        navigate('/orders');
     };
 
     const validateDeliveryAddress = () => {
@@ -573,131 +536,6 @@ const Checkout = () => {
                 }
             `}</style>
 
-            {paymentResult.visible && (
-        <div
-            role="dialog"
-            aria-modal="true"
-            style={{
-                position: 'fixed',
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-                background: 'rgba(0, 0, 0, 0.45)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 9999,
-                padding: '20px'
-            }}
-        >
-            <div
-                style={{
-                    width: '100%',
-                    maxWidth: '860px',
-                    borderRadius: '14px',
-                    overflow: 'hidden',
-                    boxShadow: '0 24px 64px rgba(0,0,0,0.35)',
-                    border: '3px solid #8A5E00',
-                    display: 'grid',
-                    gridTemplateColumns: '0.95fr 1.45fr',
-                    minHeight: '430px'
-                }}
-            >
-                <div
-                    style={{
-                        background: 'linear-gradient(160deg, #A96B00 0%, #8B5600 45%, #6F4300 100%)',
-                        color: '#fff',
-                        padding: '28px 20px 20px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        position: 'relative'
-                    }}
-                >
-                    <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '18px' }}>
-                            <span style={{ fontWeight: 700, fontSize: '1.05rem' }}>Foody App</span>
-                        </div>
-
-                        <div style={{ background: '#f3e8d2', borderRadius: '8px', padding: '10px 12px', color: '#1f2937' }}>
-                            <p style={{ margin: 0, fontSize: '0.74rem', color: '#6b7280' }}>Price Summary</p>
-                            <p style={{ margin: '2px 0 0', fontSize: '1.9rem', fontWeight: 800, color: '#111827' }}>₹{paymentResult.amount.toFixed(0)}</p>
-                        </div>
-
-                        <div style={{ marginTop: '10px', background: 'rgba(255,255,255,0.2)', borderRadius: '8px', padding: '8px 10px', fontSize: '0.8rem' }}>
-                            Using as +91 99999 99999
-                        </div>
-                    </div>
-
-                    <div style={{ fontSize: '0.75rem', opacity: 0.9, textAlign: 'left' }}>Secured by Foody Pay</div>
-                </div>
-
-                <div
-                    style={{
-                        background: paymentResult.success ? '#07A65D' : '#DC2626',
-                        color: '#fff',
-                        padding: '36px 30px 24px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}
-                >
-                    <div style={{ textAlign: 'center' }}>
-                        {paymentResult.success ? (
-                            <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.92 }}>You will be redirected in {countdown} second{countdown !== 1 ? 's' : ''}</p>
-                        ) : (
-                            <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.92 }}>Please review the message below and try again.</p>
-                        )}
-                        <h3 style={{ margin: '4px 0 0', fontSize: '2rem', fontWeight: 700 }}>
-                            {paymentResult.success ? 'Payment Successful' : 'Payment Failed'}
-                        </h3>
-                    </div>
-
-                    <div style={{ margin: '18px 0', width: '78px', height: '78px', borderRadius: '999px', border: '6px solid #A7F3D0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {paymentResult.success ? (
-                            <FaCheckCircle size={42} style={{ color: '#A7F3D0' }} />
-                        ) : (
-                            <FaTimesCircle size={42} style={{ color: '#FECACA' }} />
-                        )}
-                    </div>
-
-                    <div style={{ width: '100%', maxWidth: '280px', background: '#F9F4E8', color: '#1f2937', borderRadius: '12px', padding: '14px 14px 12px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontWeight: 700 }}>
-                            <span>Foody App</span>
-                            <span>₹{paymentResult.amount.toFixed(0)}</span>
-                        </div>
-                        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.76rem' }}>{new Date().toLocaleString()}</p>
-                        <p style={{ margin: '6px 0 0', color: '#6b7280', fontSize: '0.76rem' }}>
-                            {paymentMethod.toUpperCase()} | {(paymentResult.paymentId || 'N/A').slice(-10)}
-                        </p>
-                        <p style={{ margin: '6px 0 0', color: '#6b7280', fontSize: '0.76rem' }}>{paymentResult.message}</p>
-                    </div>
-
-                    {paymentResult.success && (
-                        <button
-                            onClick={() => navigate('/orders')}
-                            style={{
-                                marginTop: '12px',
-                                border: '1px solid rgba(255,255,255,0.28)',
-                                background: 'rgba(255,255,255,0.1)',
-                                color: '#fff',
-                                padding: '10px 18px',
-                                borderRadius: '999px',
-                                fontWeight: 600,
-                                cursor: 'pointer'
-                            }}
-                        >
-                            View My Orders
-                        </button>
-                    )}
-
-                    <div style={{ fontSize: '0.75rem', opacity: 0.95 }}>Secured by Foody Pay</div>
-                </div>
-            </div>
-        </div>
-      )}
     </div>
   );
 };
