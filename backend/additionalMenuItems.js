@@ -78,22 +78,31 @@ const categoryItems = {
     ['Tomato Rice', 85], ['Coconut Rice', 90], ['Vegetable Upma', 75], ['Rava Upma', 70], ['Medu Vada', 65],
   ],
   'North Indian': [
-    ['Paneer Butter Masala', 150], ['Chole Bhature', 130], ['Butter Naan', 50], ['Garlic Naan', 60],
-    ['Dal Tadka', 120], ['Aloo Paratha', 100], ['Paneer Tikka', 180], ['Kadai Paneer', 160],
-    ['Palak Paneer', 155], ['Rajma Masala', 130], ['Malai Kofta', 180], ['Tandoori Roti', 40],
-    ['Chicken Tikka', 220], ['Chicken Curry', 210], ['Veg Thali', 250],
+    ['Butter Chicken', 240], ['Kadai Chicken', 230], ['Chicken Tikka Masala', 250], ['Chicken Handi', 260],
+    ['Chicken Do Pyaza', 240], ['Chicken Lababdar', 270], ['Chicken Korma', 260], ['Chicken Saagwala', 250],
+    ['Chicken Rara', 280], ['Tandoori Chicken', 260], ['Chicken Tikka', 220], ['Malai Chicken Tikka', 240],
+    ['Mutton Rogan Josh', 320], ['Mutton Korma', 330], ['Mutton Do Pyaza', 320], ['Mutton Handi', 340],
+    ['Mutton Masala', 330], ['Mutton Keema', 300], ['Mutton Nihari', 350], ['Dal Makhani', 160],
+    ['Dal Tadka', 120], ['Dal Fry', 110], ['Rajma Masala', 130], ['Chole Masala', 120],
+    ['Paneer Butter Masala', 150], ['Kadai Paneer', 160], ['Shahi Paneer', 170], ['Palak Paneer', 155],
+    ['Matar Paneer', 150], ['Paneer Tikka Masala', 190], ['Paneer Lababdar', 180], ['Malai Kofta', 180],
+    ['Navratan Korma', 190], ['Aloo Gobi', 120], ['Aloo Matar', 120], ['Baingan Bharta', 130],
+    ['Jeera Aloo', 110], ['Mix Vegetable Curry', 140], ['Vegetable Korma', 160], ['Dum Aloo', 150],
+    ['Butter Naan', 50], ['Garlic Naan', 60], ['Plain Naan', 45], ['Tandoori Roti', 40],
+    ['Missi Roti', 55], ['Lachha Paratha', 75], ['Aloo Paratha', 100], ['Paneer Paratha', 130],
+    ['Amritsari Kulcha', 140], ['Stuffed Kulcha', 150],
   ],
   Pizza: [
-    ['Margherita Pizza', 220], ['Farmhouse Pizza', 260], ['Paneer Pizza', 250], ['Veggie Pizza', 230],
-    ['Cheese Burst Pizza', 300], ['Corn Pizza', 220], ['Mushroom Pizza', 240], ['Chicken Pizza', 280],
-    ['BBQ Chicken Pizza', 320], ['Pepperoni Pizza', 350], ['Tandoori Paneer Pizza', 290],
-    ['Spicy Chicken Pizza', 310], ['Mexican Pizza', 270], ['Double Cheese Pizza', 280], ['Peri Peri Chicken Pizza', 330],
+    ['Margherita Pizza', 220], ['Farmhouse Pizza', 260], ['Veggie Supreme Pizza', 250], ['Paneer Tikka Pizza', 280],
+    ['Corn Cheese Pizza', 230], ['Mushroom Pizza', 240], ['Chicken Tikka Pizza', 300], ['Chicken Pepperoni Pizza', 340],
+    ['BBQ Chicken Pizza', 320], ['Chicken Supreme Pizza', 350],
   ],
   Beverages: [
-    ['Fresh Lime Juice', 80], ['Lemon Soda', 70], ['Mango Juice', 100], ['Orange Juice', 100],
-    ['Watermelon Juice', 90], ['Pineapple Juice', 110], ['Cold Coffee', 120], ['Hot Coffee', 80],
-    ['Masala Tea', 50], ['Green Tea', 60], ['Milkshake', 140], ['Chocolate Milkshake', 160],
-    ['Mango Milkshake', 150], ['Rose Milk', 90], ['Badam Milk', 120],
+    ['Masala Tea', 50], ['Ginger Tea', 55], ['Cardamom Tea', 60], ['Black Tea', 45], ['Green Tea', 60],
+    ['Filter Coffee', 70], ['Cold Coffee', 120], ['Cappuccino', 140], ['Espresso', 100], ['Hot Chocolate', 150],
+    ['Fresh Lime Soda', 80], ['Sweet Lime Juice', 90], ['Orange Juice', 100], ['Apple Juice', 110],
+    ['Watermelon Juice', 90], ['Mango Juice', 100], ['Pineapple Juice', 110], ['Strawberry Milkshake', 160],
+    ['Chocolate Milkshake', 160], ['Mango Milkshake', 150],
   ],
   Desserts: [
     ['Gulab Jamun', 80], ['Rasgulla', 90], ['Jalebi', 85], ['Brownie', 140], ['Chocolate Cake', 180],
@@ -131,8 +140,20 @@ const additionalMenuItems = Object.entries(categoryItems).flatMap(([category, it
     ? `/biryani/${index + 1}.jpg`
     : category === 'South Indian'
       ? `/south-indian/${index + 1}.jpg`
+      : category === 'North Indian'
+        ? `/north-indian/${index + 1}.jpg`
+        : category === 'Pizza'
+          ? `/pizza/${index + 1}.jpg`
+      : category === 'Beverages'
+        ? `/beverages/${index + 1}.jpg`
+      : category === 'Fast Food' && name === 'Paneer Burger'
+        ? '/fast-food/paneer-burger.jpg'
+      : category === 'Fast Food' && name === 'Paneer Wrap'
+        ? '/fast-food/paneer-wrap.jpg'
       : category === 'Snacks' && name === 'Masala Vada'
         ? '/snacks/masala-vada.jpg'
+      : category === 'Snacks' && name === 'Paneer Pakoda'
+        ? '/snacks/paneer-pakoda.jpg'
     : imagePool[(itemNumber + index) % imagePool.length],
 })));
 
