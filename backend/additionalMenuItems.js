@@ -52,6 +52,114 @@ const biryaniImagePool = [
   'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Biryani_Rice.jpg/960px-Biryani_Rice.jpg',
 ];
 
+// Correct per-item image URLs for desserts
+const dessertImageMap = {
+  'Gulab Jamun': 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=900&auto=format&fit=crop',
+  'Rasgulla': 'https://images.unsplash.com/photo-1666513506614-9dd4e95be025?w=900&auto=format&fit=crop',
+  'Rasmalai': 'https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=900&auto=format&fit=crop',
+  'Jalebi': 'https://images.unsplash.com/photo-1666513505896-65f7af5cbb29?w=900&auto=format&fit=crop',
+  'Kaju Katli': 'https://images.pexels.com/photos/9843584/pexels-photo-9843584.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'Mysore Pak': 'https://images.pexels.com/photos/9843611/pexels-photo-9843611.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'Badam Halwa': 'https://images.pexels.com/photos/15417447/pexels-photo-15417447.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'Carrot Halwa': 'https://images.unsplash.com/photo-1666513506010-e4c5f3e27862?w=900&auto=format&fit=crop',
+  'Wheat Halwa': 'https://images.pexels.com/photos/15417447/pexels-photo-15417447.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'Sooji Halwa': 'https://images.pexels.com/photos/15417447/pexels-photo-15417447.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'Moong Dal Halwa': 'https://images.pexels.com/photos/15417447/pexels-photo-15417447.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'Gajar Halwa': 'https://images.unsplash.com/photo-1666513506010-e4c5f3e27862?w=900&auto=format&fit=crop',
+  'Kulfi': 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=900&auto=format&fit=crop',
+  'Malai Kulfi': 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=900&auto=format&fit=crop',
+  'Pista Kulfi': 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=900&auto=format&fit=crop',
+  'Mango Kulfi': 'https://images.pexels.com/photos/1346347/pexels-photo-1346347.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'Falooda': 'https://images.unsplash.com/photo-1617196034438-e5c2bdbb7cc4?w=900&auto=format&fit=crop',
+  'Royal Falooda': 'https://images.unsplash.com/photo-1617196034438-e5c2bdbb7cc4?w=900&auto=format&fit=crop',
+  'Fruit Falooda': 'https://images.unsplash.com/photo-1617196034438-e5c2bdbb7cc4?w=900&auto=format&fit=crop',
+  'Mango Falooda': 'https://images.unsplash.com/photo-1617196034438-e5c2bdbb7cc4?w=900&auto=format&fit=crop',
+  'Fruit Salad': 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=900&auto=format&fit=crop',
+  'Fruit Custard': 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=900&auto=format&fit=crop',
+  'Caramel Custard': 'https://images.unsplash.com/photo-1557499305-87a9d14741bd?w=900&auto=format&fit=crop',
+  'Chocolate Brownie': 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=900&auto=format&fit=crop',
+  'Walnut Brownie': 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=900&auto=format&fit=crop',
+  'Chocolate Lava Cake': 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=900&auto=format&fit=crop',
+  'Chocolate Cake': 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900&auto=format&fit=crop',
+  'Black Forest Cake': 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=900&auto=format&fit=crop',
+  'Red Velvet Cake': 'https://images.unsplash.com/photo-1562440499-64c9a111f713?w=900&auto=format&fit=crop',
+  'Pineapple Cake': 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=900&auto=format&fit=crop',
+  'Vanilla Cake': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&auto=format&fit=crop',
+  'Cheesecake': 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=900&auto=format&fit=crop',
+  'Blueberry Cheesecake': 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=900&auto=format&fit=crop',
+  'Chocolate Mousse': 'https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?w=900&auto=format&fit=crop',
+  'Mango Mousse': 'https://images.pexels.com/photos/1346347/pexels-photo-1346347.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'Tiramisu': 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=900&auto=format&fit=crop',
+  'Ice Cream Sundae': 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=900&auto=format&fit=crop',
+  'Chocolate Sundae': 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=900&auto=format&fit=crop',
+  'Brownie Sundae': 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=900&auto=format&fit=crop',
+  'Vanilla Ice Cream': 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=900&auto=format&fit=crop',
+  'Chocolate Ice Cream': 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=900&auto=format&fit=crop',
+  'Strawberry Ice Cream': 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=900&auto=format&fit=crop',
+  'Butterscotch Ice Cream': 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=900&auto=format&fit=crop',
+  'Mango Ice Cream': 'https://images.pexels.com/photos/1346347/pexels-photo-1346347.jpeg?auto=compress&cs=tinysrgb&w=900',
+  'Pista Ice Cream': 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=900&auto=format&fit=crop',
+  'Tender Coconut Ice Cream': 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=900&auto=format&fit=crop',
+  'Rasmalai Cake': 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=900&auto=format&fit=crop',
+  'Donut': 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=900&auto=format&fit=crop',
+  'Chocolate Donut': 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=900&auto=format&fit=crop',
+  'Choco Chip Cookie': 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=900&auto=format&fit=crop',
+};
+
+// Accurate descriptions for each dessert
+const dessertDescMap = {
+  'Gulab Jamun': 'Soft milk-solid dumplings soaked in fragrant rose-flavored sugar syrup.',
+  'Rasgulla': 'Spongy cottage cheese balls simmered in light sugar syrup, served chilled.',
+  'Rasmalai': 'Soft cottage cheese patties soaked in chilled saffron-infused sweet milk.',
+  'Jalebi': 'Crispy deep-fried spirals soaked in warm fragrant saffron sugar syrup.',
+  'Kaju Katli': 'Smooth melt-in-mouth cashew fudge garnished with silver leaf.',
+  'Mysore Pak': 'Rich gram flour fudge cooked in ghee and sugar, a Karnataka specialty.',
+  'Badam Halwa': 'Velvety almond halwa cooked in ghee with cardamom and saffron.',
+  'Carrot Halwa': 'Classic gajar halwa made with grated carrots, full cream milk and ghee.',
+  'Wheat Halwa': 'Silky smooth halwa made from whole wheat flour and clarified butter.',
+  'Sooji Halwa': 'Fluffy semolina pudding cooked with ghee, sugar and dry fruits.',
+  'Moong Dal Halwa': 'Rich slow-cooked split green gram halwa with ghee and cardamom.',
+  'Gajar Halwa': 'Sweet carrot pudding slow-cooked with milk, sugar and cardamom.',
+  'Kulfi': 'Dense creamy Indian ice cream with a rich nutty flavor, served on a stick.',
+  'Malai Kulfi': 'Creamy kulfi made from reduced whole milk with fragrant cardamom.',
+  'Pista Kulfi': 'Rich kulfi loaded with pistachios and flavored with rose water.',
+  'Mango Kulfi': 'Refreshing kulfi made with Alphonso mango pulp and full cream.',
+  'Falooda': 'Persian-origin dessert drink with vermicelli, basil seeds and rose syrup.',
+  'Royal Falooda': 'Indulgent falooda topped with kulfi, dry fruits and extra ice cream.',
+  'Fruit Falooda': 'Chilled falooda loaded with assorted fresh seasonal fruits.',
+  'Mango Falooda': 'Falooda made with fresh mango pulp, vermicelli and sweet basil seeds.',
+  'Fruit Salad': 'Fresh seasonal fruits tossed with a hint of honey and lemon.',
+  'Fruit Custard': 'Chilled vanilla custard loaded with assorted fresh cut fruits.',
+  'Caramel Custard': 'Silky baked egg custard with a golden caramel sauce on top.',
+  'Chocolate Brownie': 'Dense fudgy chocolate brownie with a perfectly crispy crust.',
+  'Walnut Brownie': 'Rich chocolate brownie studded with crunchy walnut pieces throughout.',
+  'Chocolate Lava Cake': 'Warm chocolate cake with a gooey molten chocolate lava center.',
+  'Chocolate Cake': 'Moist layered chocolate sponge cake with rich chocolate frosting.',
+  'Black Forest Cake': 'Classic chocolate sponge layered with cherry compote and whipped cream.',
+  'Red Velvet Cake': 'Vibrant red velvet sponge with smooth cream cheese frosting.',
+  'Pineapple Cake': 'Light sponge layered with fresh pineapple chunks and whipped cream.',
+  'Vanilla Cake': 'Soft fluffy vanilla sponge with clouds of creamy buttercream frosting.',
+  'Cheesecake': 'Classic baked cheesecake with a buttery graham cracker crust.',
+  'Blueberry Cheesecake': 'Creamy cheesecake topped with tangy-sweet blueberry compote.',
+  'Chocolate Mousse': 'Light airy whipped chocolate mousse served chilled in a glass.',
+  'Mango Mousse': 'Chilled airy mousse made with fresh Alphonso mango puree.',
+  'Tiramisu': 'Classic Italian dessert with espresso-soaked ladyfingers and mascarpone.',
+  'Ice Cream Sundae': 'Scoops of ice cream drizzled with caramel sauce, nuts and cherry.',
+  'Chocolate Sundae': 'Chocolate ice cream topped with hot fudge sauce and whipped cream.',
+  'Brownie Sundae': 'Warm fudgy brownie served with a generous scoop of vanilla ice cream.',
+  'Vanilla Ice Cream': 'Classic creamy vanilla ice cream made with real vanilla bean extract.',
+  'Chocolate Ice Cream': 'Rich dark chocolate ice cream with an intense cocoa flavor.',
+  'Strawberry Ice Cream': 'Creamy strawberry ice cream made with real strawberry puree.',
+  'Butterscotch Ice Cream': 'Smooth butterscotch-flavored ice cream with caramel ripple swirls.',
+  'Mango Ice Cream': 'Refreshing mango ice cream bursting with tropical Alphonso mango flavor.',
+  'Pista Ice Cream': 'Creamy pistachio ice cream with real pista chunks and rose water.',
+  'Tender Coconut Ice Cream': 'Refreshing ice cream made with fresh tender coconut water and flesh.',
+  'Rasmalai Cake': 'Fusion cake inspired by rasmalai, layered with saffron cream and cardamom.',
+  'Donut': 'Classic ring-shaped donut with a sweet glazed sugar coating.',
+  'Chocolate Donut': 'Soft fluffy donut dipped in a smooth rich chocolate glaze.',
+  'Choco Chip Cookie': 'Buttery golden cookie loaded with generous dark chocolate chips.',
+};
+
 const categoryItems = {
   Biryani: [
     ['Chicken Biryani', 180], ['Mutton Biryani', 260], ['Egg Biryani', 140], ['Fish Biryani', 240],
@@ -105,9 +213,18 @@ const categoryItems = {
     ['Chocolate Milkshake', 160], ['Mango Milkshake', 150],
   ],
   Desserts: [
-    ['Gulab Jamun', 80], ['Rasgulla', 90], ['Jalebi', 85], ['Brownie', 140], ['Chocolate Cake', 180],
-    ['Ice Cream', 100], ['Kulfi', 110], ['Falooda', 180], ['Carrot Halwa', 120], ['Gajar Halwa', 120],
-    ['Rasmalai', 150], ['Kheer', 100], ['Fruit Salad', 110], ['Chocolate Mousse', 160], ['Cheesecake', 220],
+    ['Gulab Jamun', 80], ['Rasgulla', 90], ['Rasmalai', 150], ['Jalebi', 85], ['Kaju Katli', 200],
+    ['Mysore Pak', 130], ['Badam Halwa', 160], ['Carrot Halwa', 120], ['Wheat Halwa', 100], ['Sooji Halwa', 80],
+    ['Moong Dal Halwa', 140], ['Gajar Halwa', 120], ['Kulfi', 110], ['Malai Kulfi', 120], ['Pista Kulfi', 140],
+    ['Mango Kulfi', 130], ['Falooda', 180], ['Royal Falooda', 220], ['Fruit Falooda', 190], ['Mango Falooda', 200],
+    ['Fruit Salad', 110], ['Fruit Custard', 130], ['Caramel Custard', 140], ['Chocolate Brownie', 140],
+    ['Walnut Brownie', 160], ['Chocolate Lava Cake', 220], ['Chocolate Cake', 180], ['Black Forest Cake', 220],
+    ['Red Velvet Cake', 230], ['Pineapple Cake', 200], ['Vanilla Cake', 180], ['Cheesecake', 220],
+    ['Blueberry Cheesecake', 250], ['Chocolate Mousse', 160], ['Mango Mousse', 150], ['Tiramisu', 280],
+    ['Ice Cream Sundae', 160], ['Chocolate Sundae', 180], ['Brownie Sundae', 200], ['Vanilla Ice Cream', 100],
+    ['Chocolate Ice Cream', 110], ['Strawberry Ice Cream', 110], ['Butterscotch Ice Cream', 110],
+    ['Mango Ice Cream', 120], ['Pista Ice Cream', 130], ['Tender Coconut Ice Cream', 140],
+    ['Rasmalai Cake', 260], ['Donut', 80], ['Chocolate Donut', 100], ['Choco Chip Cookie', 90],
   ],
   Chinese: [
     ['Veg Fried Rice', 140], ['Chicken Fried Rice', 180], ['Egg Fried Rice', 160], ['Schezwan Fried Rice', 170],
@@ -134,7 +251,9 @@ const additionalMenuItems = Object.entries(categoryItems).flatMap(([category, it
   restaurant: `r${(index % 3) + 1}`,
   name,
   category,
-  description: `${name} prepared with fresh ingredients and traditional flavors.`,
+  description: category === 'Desserts' && dessertDescMap[name]
+    ? dessertDescMap[name]
+    : `${name} prepared with fresh ingredients and traditional flavors.`,
   price,
   image: category === 'Biryani'
     ? `/biryani/${index + 1}.jpg`
@@ -144,17 +263,19 @@ const additionalMenuItems = Object.entries(categoryItems).flatMap(([category, it
         ? `/north-indian/${index + 1}.jpg`
         : category === 'Pizza'
           ? `/pizza/${index + 1}.jpg`
-      : category === 'Beverages'
-        ? `/beverages/${index + 1}.jpg`
-      : category === 'Fast Food' && name === 'Paneer Burger'
-        ? '/fast-food/paneer-burger.jpg'
-      : category === 'Fast Food' && name === 'Paneer Wrap'
-        ? '/fast-food/paneer-wrap.jpg'
-      : category === 'Snacks' && name === 'Masala Vada'
-        ? '/snacks/masala-vada.jpg'
-      : category === 'Snacks' && name === 'Paneer Pakoda'
-        ? '/snacks/paneer-pakoda.jpg'
-    : imagePool[(itemNumber + index) % imagePool.length],
+          : category === 'Beverages'
+            ? `/beverages/${index + 1}.jpg`
+            : category === 'Desserts' && dessertImageMap[name]
+              ? dessertImageMap[name]
+              : category === 'Fast Food' && name === 'Paneer Burger'
+                ? '/fast-food/paneer-burger.jpg'
+                : category === 'Fast Food' && name === 'Paneer Wrap'
+                  ? '/fast-food/paneer-wrap.jpg'
+                  : category === 'Snacks' && name === 'Masala Vada'
+                    ? '/snacks/masala-vada.jpg'
+                    : category === 'Snacks' && name === 'Paneer Pakoda'
+                      ? '/snacks/paneer-pakoda.jpg'
+                      : imagePool[(itemNumber + index) % imagePool.length],
 })));
 
 module.exports = additionalMenuItems;
