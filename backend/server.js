@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const crypto = require('crypto');
+const { sendPasswordResetEmail } = require('./emailService');
 
 dotenv.config();
 
@@ -16,7 +18,11 @@ app.use(express.json());
 app.use('/api/payment', paymentRoutes);
 
 app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, message: 'Backend is running' });
+  res.json({
+    ok: true,
+    message: 'Backend is running',
+    smtpConfigured: Boolean(process.env.SMTP_HOST && process.env.SMTP_USERNAME && process.env.SMTP_PASSWORD),
+  });
 });
 
 const restaurants = [
@@ -580,6 +586,7 @@ const users = [
 ];
 
 const orders = [];
+const passwordResetTokens = new Map();
 
 global.__foodOrderingState = {
   users,
@@ -648,6 +655,57 @@ app.post('/api/auth/register', (req, res) => {
 
   users.push(createdUser);
   return res.status(201).json(toAuthPayload(createdUser));
+});
+
+app.post('/api/auth/request-password-reset', async (req, res) => {
+  const normalizedEmail = String(req.body?.email || '').trim().toLowerCase();
+  const user = users.find((entry) => entry.email.toLowerCase() === normalizedEmail);
+
+  if (user) {
+    const token = crypto.randomBytes(32).toString('hex');
+    passwordResetTokens.set(token, {
+      userId: user._id,
+      expiresAt: Date.now() + 15 * 60 * 1000,
+    });
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const resetLink = `${frontendUrl}/forgot-password?token=${token}`;
+
+    try {
+      await sendPasswordResetEmail(user.email, resetLink);
+    } catch (error) {
+      passwordResetTokens.delete(token);
+      console.error('Password reset email error:', error.message);
+      return res.status(503).json({ message: 'Unable to send the password reset email.' });
+    }
+  }
+
+  return res.json({ message: 'If an account exists for that email, a reset link has been sent.' });
+});
+
+app.post('/api/auth/reset-password', (req, res) => {
+  const token = String(req.body?.token || '');
+  const newPassword = String(req.body?.newPassword || '').trim();
+  const resetRequest = passwordResetTokens.get(token);
+
+  if (!resetRequest || resetRequest.expiresAt < Date.now()) {
+    passwordResetTokens.delete(token);
+    return res.status(400).json({ message: 'This password reset link is invalid or expired.' });
+  }
+
+  if (newPassword.length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters long.' });
+  }
+
+  const user = users.find((entry) => entry._id === resetRequest.userId);
+  if (!user) {
+    passwordResetTokens.delete(token);
+    return res.status(400).json({ message: 'This password reset link is invalid or expired.' });
+  }
+
+  user.password = newPassword;
+  passwordResetTokens.delete(token);
+  return res.json({ message: 'Password reset successful.' });
 });
 
 app.put('/api/auth/profile', (req, res) => {

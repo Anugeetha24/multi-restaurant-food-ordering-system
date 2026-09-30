@@ -37,6 +37,7 @@ const Checkout = () => {
     });
     const [countdown, setCountdown] = useState(4);
     const [isRazorpayReady, setIsRazorpayReady] = useState(false);
+    const isMockPayment = import.meta.env.VITE_PAYMENT_MODE !== 'live';
 
     const processingVisible = isProcessing && !paymentResult.visible;
 
@@ -177,6 +178,33 @@ const Checkout = () => {
         return true;
     };
 
+    const waitForRazorpay = () => {
+        if (window.Razorpay) {
+            return Promise.resolve();
+        }
+
+        return new Promise((resolve, reject) => {
+            const script = document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
+            if (!script) {
+                reject(new Error('Razorpay could not be loaded. Check your internet connection and try again.'));
+                return;
+            }
+
+            const timeout = window.setTimeout(() => {
+                reject(new Error('Razorpay could not be loaded. Check your internet connection and try again.'));
+            }, 10000);
+
+            script.addEventListener('load', () => {
+                window.clearTimeout(timeout);
+                resolve();
+            }, { once: true });
+            script.addEventListener('error', () => {
+                window.clearTimeout(timeout);
+                reject(new Error('Razorpay could not be loaded. Check your internet connection and try again.'));
+            }, { once: true });
+        });
+    };
+
     const handlePayClick = async () => {
         setIsProcessing(true);
 
@@ -202,9 +230,13 @@ const Checkout = () => {
                 return;
             }
 
-            if (!isRazorpayReady || !window.Razorpay) {
-                throw new Error('Razorpay is still loading. Please try again in a second.');
+            if (isMockPayment) {
+                await completeSuccessfulPayment(`mock_payment_${Date.now()}`, '', paymentMethod);
+                setIsProcessing(false);
+                return;
             }
+
+            await waitForRazorpay();
 
             const config = { headers: { Authorization: `Bearer ${authUser.token}` } };
 

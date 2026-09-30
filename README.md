@@ -68,11 +68,12 @@ This is a complete full-stack application for a multi-restaurant food ordering s
     ```bash
     cd frontend
     ```
-2.  Install dependencies:
+2.  The checkout uses the local mock payment flow by default and displays a successful payment after creating the paid order. Set `VITE_PAYMENT_MODE=live` before building or starting the frontend to use Razorpay instead.
+3.  Install dependencies:
     ```bash
     npm install
     ```
-3.  Run React App:
+4.  Run React App:
     ```bash
     npm run dev
     ```
@@ -80,11 +81,28 @@ This is a complete full-stack application for a multi-restaurant food ordering s
 
 ## API Endpoints
 
-- **Auth:** `/api/auth/login`, `/api/auth/register`, `/api/auth/profile`
+- **Auth:** `/api/auth/login`, `/api/auth/register`, `/api/auth/profile`, `/api/auth/request-password-reset`, `/api/auth/reset-password`
 - **Restaurants:** `/api/restaurants`, `/api/restaurants/:id`
 - **Menu:** `/api/menu/:restaurantId`
 - **Orders:** `/api/orders`, `/api/orders/myorders`, `/api/orders/:id/status`
 - **Bookings:** `/api/bookings`, `/api/bookings/tables/:restaurantId`
+
+### SMTP Password Reset Setup
+
+Add these values to `backend/.env` to send reset links directly through Gmail SMTP:
+
+```env
+FRONTEND_URL=http://localhost:5173
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=yourgmail@gmail.com
+SMTP_PASSWORD=your-gmail-app-password
+SMTP_FROM=yourgmail@gmail.com
+```
+
+Use a Google App Password instead of your regular Gmail password. Port `465` is also supported for SSL SMTP.
+
+Copy `backend/.env.example` to `backend/.env`, replace the placeholder values with real Gmail details, then restart the backend. Check `http://localhost:5000/api/health`; email is ready only when `smtpConfigured` is `true`. The reset request must use an email address that already exists in the application.
 
 ## Sample Users (Password: password123)
 

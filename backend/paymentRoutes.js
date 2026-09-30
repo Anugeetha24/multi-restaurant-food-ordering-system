@@ -45,6 +45,19 @@ const getRazorpayClient = () => {
     });
 };
 
+router.get('/config', (req, res) => {
+    const key = process.env.RAZORPAY_KEY_ID;
+
+    if (!key) {
+        return res.status(500).json({
+            success: false,
+            message: 'Payment service is not configured. Add RAZORPAY_KEY_ID in backend .env'
+        });
+    }
+
+    return res.json({ success: true, key });
+});
+
 // Create Razorpay Order
 router.post('/create-order', async (req, res) => {
     try {

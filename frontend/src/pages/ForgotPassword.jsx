@@ -1,28 +1,46 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaLock, FaArrowLeft } from 'react-icons/fa';
+import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 
 const ForgotPassword = () => {
+  const [searchParams] = useSearchParams();
+  const resetToken = searchParams.get('token') || '';
+  const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (newPassword !== confirmPassword) {
-      alert('Passwords do not match!');
-      return;
-    }
+    setMessage('');
+    setError('');
+    setIsSubmitting(true);
 
-    if (newPassword.length < 6) {
-      alert('Password must be at least 6 characters long');
-      return;
+    try {
+      if (!resetToken) {
+        const response = await axios.post('/api/auth/request-password-reset', { email });
+        setMessage(response.data.message);
+      } else {
+        if (newPassword !== confirmPassword) {
+          throw new Error('Passwords do not match.');
+        }
+        const response = await axios.post('/api/auth/reset-password', {
+          token: resetToken,
+          newPassword,
+        });
+        alert(response.data.message);
+        navigate('/login');
+      }
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || requestError.message || 'Unable to process your request.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // Here you would typically call an API to reset the password
-    alert('Password reset successful! Please login with your new password.');
-    navigate('/login');
   };
 
   return (
@@ -47,11 +65,23 @@ const ForgotPassword = () => {
                 <FaArrowLeft /> Back to Login
             </Link>
             
-            <h2 style={{ fontFamily: 'Playfair Display', fontSize: '2.5rem', marginBottom: '10px', color: '#333' }}>Forgot Password</h2>
-            <p style={{ color: '#777', marginBottom: '40px' }}>Enter your new password below.</p>
+            <h2 style={{ fontFamily: 'Playfair Display', fontSize: '2.5rem', marginBottom: '10px', color: '#333' }}>{resetToken ? 'Reset Password' : 'Forgot Password'}</h2>
+            <p style={{ color: '#777', marginBottom: '40px' }}>{resetToken ? 'Create a new password for your account.' : 'Enter your email to receive a password reset link.'}</p>
 
             <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '20px' }}>
+              {!resetToken && <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '10px', fontWeight: 'bold', color: '#333' }}>Email</label>
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #dfe6e9', outline: 'none', fontSize: '0.95rem', boxSizing: 'border-box' }}
+                  required
+                />
+              </div>}
+
+              {resetToken && <div style={{ marginBottom: '20px' }}>
                     <label style={{ display: 'block', marginBottom: '10px', fontWeight: 'bold', color: '#333' }}>New Password</label>
                     <div style={{ position: 'relative' }}>
                         <FaLock style={{ position: 'absolute', top: '50%', left: '12px', transform: 'translateY(-50%)', color: '#a4b0be' }} />
@@ -64,9 +94,9 @@ const ForgotPassword = () => {
                             required
                         />
                     </div>
-                </div>
+                </div>}
 
-                <div style={{ marginBottom: '30px' }}>
+                {resetToken && <div style={{ marginBottom: '30px' }}>
                     <label style={{ display: 'block', marginBottom: '10px', fontWeight: 'bold', color: '#333' }}>Confirm Password</label>
                     <div style={{ position: 'relative' }}>
                         <FaLock style={{ position: 'absolute', top: '50%', left: '12px', transform: 'translateY(-50%)', color: '#a4b0be' }} />
@@ -79,10 +109,13 @@ const ForgotPassword = () => {
                             required
                         />
                     </div>
-                </div>
+                </div>}
 
-                <button type="submit" style={{ width: '100%', padding: '12px', background: '#d32f2f', color: 'white', border: 'none', borderRadius: '10px', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 5px 15px rgba(211, 47, 47, 0.3)' }}>
-                    Reset Password
+                {message && <p style={{ color: '#16803c', marginBottom: '20px' }}>{message}</p>}
+                {error && <p style={{ color: '#c62828', marginBottom: '20px' }}>{error}</p>}
+
+                <button type="submit" disabled={isSubmitting} style={{ width: '100%', padding: '12px', background: '#d32f2f', color: 'white', border: 'none', borderRadius: '10px', fontSize: '1rem', fontWeight: 'bold', cursor: isSubmitting ? 'wait' : 'pointer', opacity: isSubmitting ? 0.7 : 1, boxShadow: '0 5px 15px rgba(211, 47, 47, 0.3)' }}>
+                  {isSubmitting ? 'Sending...' : resetToken ? 'Reset Password' : 'Send Reset Link'}
                 </button>
             </form>
 
