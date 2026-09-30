@@ -155,6 +155,34 @@ body.theme-dark {
   font-size: 1rem;
 }
 
+.footer-link.logout {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 10px;
+  text-align: left;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.footer-link.logout:hover,
+.footer-link.logout:focus-visible,
+.footer-link.logout:active {
+  color: var(--primary-orange);
+  background-color: var(--light-orange);
+}
+
+.footer-link.help-link {
+  padding: 10px 0;
+  border-radius: 10px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.footer-link.help-link:hover,
+.footer-link.help-link:focus-visible,
+.footer-link.help-link:active {
+  color: var(--primary-orange);
+  background-color: var(--light-orange);
+}
+
 /* Dashboard Content */
 .dashboard-container {
   padding: 10px;
@@ -729,13 +757,91 @@ body.theme-dark {
 }
 
 .landing-nav-links a:hover {
-  color: #d32f2f;
+  color: var(--primary-orange);
+}
+
+.landing-nav-links a.active,
+.landing-nav-links a:focus-visible,
+.landing-nav-links a:active {
+  color: var(--primary-orange);
 }
 
 .landing-nav-actions {
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+.landing-nav-actions a {
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.cart-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #2d3436;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.cart-icon .badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #d32f2f;
+  color: #fff;
+  font-size: 0.68rem;
+  line-height: 17px;
+  text-align: center;
+}
+
+.cart-icon:hover,
+.cart-icon:focus-visible,
+.cart-icon:active {
+  color: var(--primary-orange);
+}
+
+.login-btn,
+.signup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 82px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.login-btn {
+  background-color: var(--primary-orange);
+}
+
+.signup-btn {
+  background-color: #d32f2f;
+}
+
+.login-btn:hover,
+.login-btn:focus-visible,
+.login-btn:active {
+  background-color: #d88700;
+  color: #fff;
+}
+
+.signup-btn:hover,
+.signup-btn:focus-visible,
+.signup-btn:active {
+  color: #fff;
+  background-color: #b71c1c;
 }
 
 /* Hero Section */

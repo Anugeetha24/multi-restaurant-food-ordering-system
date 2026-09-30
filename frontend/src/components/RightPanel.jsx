@@ -2,20 +2,15 @@ import { useContext, useState, useEffect } from 'react';
 import CartContext from '../context/CartContext';
 import AuthContext from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { FaWallet, FaExchangeAlt, FaPlus, FaBitcoin, FaMapMarkerAlt, FaTicketAlt, FaChevronRight } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 
 const RightPanel = () => {
-  const { cartItems, decreaseQty, addToCart } = useContext(CartContext);
+    const { cartItems, decreaseQty, addToCart, removeFromCart } = useContext(CartContext);
   const { user, updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [address, setAddress] = useState(user?.address || 'Set your location');
+    const [address, setAddress] = useState(user?.address || 'Select Delivery Location');
   const [locationLoading, setLocationLoading] = useState(false);
-
-    const walletBalance = Number(user?.walletBalance);
-    const formattedWalletBalance = Number.isFinite(walletBalance)
-        ? walletBalance.toFixed(2)
-        : '0.00';
 
   // Update local address state if user context updates (e.g. on login)
   useEffect(() => {
@@ -66,36 +61,6 @@ const RightPanel = () => {
 
   return (
     <div className="right-panel">
-      {/* Balance Section */}
-      <div className="balance-section">
-        <div className="balance-header">
-            <h3>Your Balance</h3>
-        </div>
-        <div className="balance-card">
-            <div className="balance-row">
-                <div className="balance-info">
-                    <span className="label">Balance</span>
-                    <span className="amount">₹{formattedWalletBalance}</span>
-                </div>
-                <button className="top-up-btn"><FaChevronRight /></button>
-            </div>
-            <div className="balance-actions">
-                <div className="action-item">
-                    <div className="icon-box"><FaExchangeAlt /></div>
-                    <span>Transfer</span>
-                </div>
-                <div className="action-item">
-                    <div className="icon-box"><FaPlus /></div>
-                    <span>Top Up</span>
-                </div>
-                <div className="action-item">
-                    <div className="icon-box"><FaBitcoin /></div>
-                    <span>Crypto</span>
-                </div>
-            </div>
-        </div>
-      </div>
-
       {/* Address Section */}
       <div className="address-section">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
@@ -119,10 +84,13 @@ const RightPanel = () => {
 
       {/* Order Menu (Cart) */}
       <div className="order-menu-section">
-        <h3>Order Menu</h3>
+        <h3>Your Cart</h3>
         <div className="cart-list">
             {cartItems.length === 0 ? (
-                <p className="empty-cart-text">Cart is empty</p>
+                <div className="empty-cart-text">
+                    <p>Your cart is empty</p>
+                    <p>Add delicious food from a restaurant to get started.</p>
+                </div>
             ) : (
                 cartItems.map((item) => (
                     <div key={item._id} className="cart-item-row">
@@ -131,7 +99,14 @@ const RightPanel = () => {
                         </div>
                         <div className="item-info">
                             <h4>{item.name}</h4>
-                            <span className="item-price-qty">x{item.qty} <span className="price">+₹{(item.price * item.qty).toFixed(2)}</span></span>
+                            <span className="item-price-qty">₹{Number(item.price).toFixed(2)} each</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' }}>
+                                <button type="button" aria-label={`Decrease ${item.name} quantity`} onClick={() => decreaseQty(item._id)} style={{ border: 'none', background: '#f1f2f6', borderRadius: '6px', width: '24px', height: '24px', cursor: 'pointer' }}><FaMinus size={10} /></button>
+                                <span>{item.qty}</span>
+                                <button type="button" aria-label={`Increase ${item.name} quantity`} onClick={() => addToCart(item)} style={{ border: 'none', background: '#fff5e6', color: '#F29F05', borderRadius: '6px', width: '24px', height: '24px', cursor: 'pointer' }}><FaPlus size={10} /></button>
+                                <button type="button" aria-label={`Remove ${item.name} from cart`} onClick={() => removeFromCart(item._id)} style={{ border: 'none', background: 'none', color: '#dc3545', cursor: 'pointer', marginLeft: 'auto' }}><FaTrash size={12} /></button>
+                            </div>
+                            <span className="item-price-qty"><span className="price">₹{(item.price * item.qty).toFixed(2)}</span></span>
                         </div>
                     </div>
                 ))
@@ -142,6 +117,10 @@ const RightPanel = () => {
       {/* Totals & Checkout - Only show if cart has items */}
       {cartItems.length > 0 && (
           <div className="checkout-section">
+                        <div className="summary-row">
+                                <span>Subtotal</span>
+                                <span>₹{total.toFixed(2)}</span>
+                        </div>
             <div className="summary-row">
                 <span>Delivery</span>
                 <span>+₹{deliveryFee.toFixed(2)}</span>
@@ -151,12 +130,6 @@ const RightPanel = () => {
                 <span>₹{finalTotal.toFixed(2)}</span>
             </div>
             
-            <div className="coupon-input">
-                <FaTicketAlt />
-                <input type="text" placeholder="Get a coupon code?" />
-                <FaChevronRight />
-            </div>
-
             <button className="checkout-btn-orange" onClick={() => navigate('/checkout')}>
                 Checkout
             </button>

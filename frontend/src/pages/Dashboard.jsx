@@ -28,10 +28,11 @@ const Dashboard = () => {
   // Categories
   const categories = [
     { name: 'All', icon: '🍽️' },
-    { name: 'Burger', icon: '🍔' },
-    { name: 'Beverage', icon: '🥤' },
-    { name: 'Seafood', icon: '🐟' },
+    { name: 'Biryani', icon: '🍛' },
+    { name: 'South Indian', icon: '🥞' },
+    { name: 'North Indian', icon: '🫓' },
     { name: 'Pizza', icon: '🍕' },
+    { name: 'Beverages', icon: '🥤' },
     { name: 'Chicken', icon: '🍗' },
   ];
 
@@ -90,7 +91,16 @@ const Dashboard = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const filteredDishes = activeCategory === 'All' ? dishes : dishes.filter(d => d.category === activeCategory);
+  const filteredDishes = activeCategory === 'All' ? dishes : dishes.filter((dish) => {
+    const category = String(dish.category || '').toLowerCase();
+    const dishName = String(dish.name || '').toLowerCase();
+    if (category === activeCategory.toLowerCase()) return true;
+    if (activeCategory === 'Beverages') return category === 'beverage' || category === 'beverages';
+    if (activeCategory === 'Biryani') return dishName.includes('biryani');
+    if (activeCategory === 'South Indian') return /dosa|idli|vada|sambar/.test(dishName);
+    if (activeCategory === 'North Indian') return /paneer|naan|butter chicken|tikka/.test(dishName);
+    return category === activeCategory.toLowerCase();
+  });
   const unreadCount = recentOrders.filter((order) => order.status !== 'Delivered').length;
 
   return (
@@ -184,8 +194,8 @@ const Dashboard = () => {
       {/* Banner */}
       <div className="promo-banner">
         <div className="promo-content">
-            <h1>Get Up To 20% Discount On Your First Order</h1>
-            <p>Get the absolute best out of the main dishes that are prepared by the top 1% of chef around the world. Don't hesitate to get started now!</p>
+            <h1>Order Your Favorite Food From Multiple Restaurants</h1>
+            <p>Explore multiple restaurants, browse their menus, add your favorite dishes to your cart, and place your order through a single platform.</p>
         </div>
         <div className="promo-image">
             {/* Chef Illustration Placeholder */}
@@ -196,7 +206,7 @@ const Dashboard = () => {
       {/* Categories */}
       <div className="section-header">
         <h3>Category</h3>
-        <span className="view-all">View all &gt;</span>
+        <Link to="/categories" className="view-all">View all &gt;</Link>
       </div>
       <div className="category-row">
         {categories.map((cat, index) => (
@@ -228,14 +238,14 @@ const Dashboard = () => {
                       event.currentTarget.src = 'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=900';
                     }}
                   />
-                    <span className="discount-badge">Top Rated</span>
                 </div>
                 <div className="dish-info">
-                    <div className="rating">
-                        {[...Array(5)].map((_, i) => (
-                            <FaStar key={i} color={i < Math.floor(restaurant.rating || 4) ? "#f1c40f" : "#ddd"} size={12} />
-                        ))}
-                    </div>
+                    {Number.isFinite(Number(restaurant.rating)) && <div className="rating">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} color={i < Math.floor(Number(restaurant.rating)) ? "#f1c40f" : "#ddd"} size={12} />
+                      ))}
+                      <span style={{ marginLeft: '5px', fontSize: '0.8rem', color: '#636e72' }}>{restaurant.rating}</span>
+                    </div>}
                     <h4>{restaurant.name}</h4>
                     <p style={{ fontSize: '0.85rem', color: '#636e72' }}>{restaurant.cuisine}</p>
                     <p style={{ fontSize: '0.8rem', color: '#999' }}>📍 {restaurant.address}</p>
@@ -260,7 +270,6 @@ const Dashboard = () => {
             <div key={dish._id} className="dish-card">
                 <div className="dish-img">
                     <img src={dish.image || 'https://via.placeholder.com/150'} alt={dish.name} />
-                    <span className="discount-badge">20% Off</span>
                     <span className="fav-icon" onClick={() => toggleFavorite(dish)} style={{ cursor: 'pointer' }}>
                       {isFavorite(dish._id) ? 
                         <FaHeart style={{ color: '#ff0000' }} /> : 
@@ -269,11 +278,6 @@ const Dashboard = () => {
                     </span>
                 </div>
                 <div className="dish-info">
-                    <div className="rating">
-                        {[...Array(5)].map((_, i) => (
-                            <FaStar key={i} color={i < 4 ? "#f1c40f" : "#ddd"} size={12} />
-                        ))}
-                    </div>
                     <h4>{dish.name}</h4>
                     <p className="price">₹{dish.price}</p>
                     <button className="add-btn" onClick={() => addToCart({ ...dish, qty: 1 })}><FaPlus /></button>

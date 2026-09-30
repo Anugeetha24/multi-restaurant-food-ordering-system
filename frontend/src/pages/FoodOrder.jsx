@@ -8,7 +8,9 @@ const FoodOrder = () => {
   const { addToCart } = useContext(CartContext);
   const { toggleFavorite, isFavorite } = useContext(FavoritesContext);
   const [activeCategory, setActiveCategory] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
   const [dishes, setDishes] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const asArray = (value) => (Array.isArray(value) ? value : []);
   const getDishImage = (dish) => dish?.image || dish?.photo || dish?.imageUrl || 'https://via.placeholder.com/400x300?text=Dish';
@@ -31,8 +33,12 @@ const FoodOrder = () => {
   useEffect(() => {
     const fetchMenu = async () => {
         try {
-            const { data } = await axios.get('/api/menu');
-        setDishes(asArray(data?.data ?? data));
+            const [{ data: menuData }, { data: restaurantData }] = await Promise.all([
+              axios.get('/api/menu'),
+              axios.get('/api/restaurants')
+            ]);
+            setDishes(asArray(menuData?.data ?? menuData));
+            setRestaurants(asArray(restaurantData?.data ?? restaurantData));
             setLoading(false);
         } catch (error) {
             console.error("Error fetching menu", error);
@@ -62,7 +68,23 @@ const FoodOrder = () => {
     return false;
   };
 
-  const filteredDishes = dishes.filter((dish) => matchesCategory(dish.category, activeCategory));
+  const filteredDishes = dishes.filter((dish) => {
+    const matchesSearch = [dish.name, dish.description, dish.category]
+      .some((value) => String(value || '').toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesCategory(dish.category, activeCategory) && matchesSearch;
+  });
+  const restaurantNames = restaurants.reduce((names, restaurant) => {
+    names[restaurant._id] = restaurant.name;
+    return names;
+  }, {});
+  const groupedDishes = filteredDishes.reduce((groups, dish) => {
+    const restaurantId = dish.restaurant || 'other';
+    if (!groups[restaurantId]) {
+      groups[restaurantId] = [];
+    }
+    groups[restaurantId].push(dish);
+    return groups;
+  }, {});
 
   return (
     <div className="food-order-page">
@@ -70,7 +92,7 @@ const FoodOrder = () => {
         <h2>Food Order</h2>
         <div className="search-box" style={{ background: '#fff', padding: '10px 20px', borderRadius: '25px', display: 'flex', alignItems: 'center', gap: '10px', width: '300px' }}>
             <FaSearch color="#a4b0be" />
-            <input type="text" placeholder="Search food..." style={{ border: 'none', outline: 'none', width: '100%' }} />
+            <input type="text" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Search food..." style={{ border: 'none', outline: 'none', width: '100%' }} />
         </div>
       </div>
 
@@ -95,37 +117,45 @@ const FoodOrder = () => {
         ))}
       </div>
 
-      <div className="dishes-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '25px' }}>
+      <div>
         {loading ? <p>Loading menu...</p> : filteredDishes.length === 0 ? (
           <p style={{ color: '#636e72' }}>No items found in {activeCategory}. Try another category.</p>
-        ) : filteredDishes.map((dish) => (
-            <div key={dish._id} className="dish-card" style={{ background: '#fff', borderRadius: '20px', padding: '15px', position: 'relative' }}>
-                <div className="dish-img" style={{ height: '150px', borderRadius: '15px', overflow: 'hidden', marginBottom: '15px', position: 'relative' }}>
-                  <img
-                    src={getDishImage(dish)}
-                    alt={dish.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    onError={(event) => {
-                      event.currentTarget.onerror = null;
-                      event.currentTarget.src = getFallbackImage(dish);
-                    }}
-                  />
-                    <span onClick={() => toggleFavorite(dish)} style={{ position: 'absolute', top: '10px', right: '10px', background: '#fff', padding: '8px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {isFavorite(dish._id) ? 
-                        <FaHeart style={{ color: '#ff0000' }} /> : 
-                        <FaRegHeart style={{ color: '#000' }} />
-                      }
-                    </span>
-                </div>
-                <div className="dish-info">
-                    <h4 style={{ fontSize: '1rem', marginBottom: '5px' }}>{dish.name}</h4>
-                    <p style={{ color: '#a4b0be', fontSize: '0.8rem', marginBottom: '10px' }}>{dish.category}</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>₹{dish.price}</span>
-                        <button onClick={() => addToCart({ ...dish, qty: 1 })} style={{ background: '#F29F05', color: '#fff', border: 'none', width: '35px', height: '35px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FaPlus /></button>
+        ) : Object.entries(groupedDishes).map(([restaurantId, restaurantDishes]) => (
+          <section key={restaurantId} style={{ marginBottom: '35px' }}>
+            <h3 style={{ marginBottom: '15px' }}>{restaurantNames[restaurantId] || 'Restaurant Menu'}</h3>
+            <div className="dishes-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '25px' }}>
+              {restaurantDishes.map((dish) => (
+                <div key={dish._id} className="dish-card" style={{ background: '#fff', borderRadius: '20px', padding: '15px', position: 'relative' }}>
+                    <div className="dish-img" style={{ height: '150px', borderRadius: '15px', overflow: 'hidden', marginBottom: '15px', position: 'relative' }}>
+                      <img
+                        src={getDishImage(dish)}
+                        alt={dish.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(event) => {
+                          event.currentTarget.onerror = null;
+                          event.currentTarget.src = getFallbackImage(dish);
+                        }}
+                      />
+                        <span onClick={() => toggleFavorite(dish)} style={{ position: 'absolute', top: '10px', right: '10px', background: '#fff', padding: '8px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {isFavorite(dish._id) ? 
+                            <FaHeart style={{ color: '#ff0000' }} /> : 
+                            <FaRegHeart style={{ color: '#000' }} />
+                          }
+                        </span>
+                    </div>
+                    <div className="dish-info">
+                        <h4 style={{ fontSize: '1rem', marginBottom: '5px' }}>{dish.name}</h4>
+                        <p style={{ color: '#636e72', fontSize: '0.85rem', lineHeight: 1.4, marginBottom: '8px' }}>{dish.description || 'Freshly prepared for your order.'}</p>
+                        <p style={{ color: '#a4b0be', fontSize: '0.8rem', marginBottom: '10px' }}>{dish.category}</p>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>₹{dish.price}</span>
+                            <button aria-label={`Add ${dish.name} to cart`} onClick={() => addToCart({ ...dish, qty: 1 })} style={{ background: '#F29F05', color: '#fff', border: 'none', width: '35px', height: '35px', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FaPlus /></button>
+                        </div>
                     </div>
                 </div>
+              ))}
             </div>
+          </section>
         ))}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { FaShoppingBag } from 'react-icons/fa';
 
 const LandingNavbar = () => {
@@ -8,17 +8,17 @@ const LandingNavbar = () => {
         <h1>Foody</h1>
       </div>
       <ul className="landing-nav-links">
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/menu">Menu</Link></li>
-        <li><Link to="/about">About Us</Link></li>
-        <li><Link to="/contact">Contact</Link></li>
+        <li><NavLink to="/" end>Home</NavLink></li>
+        <li><NavLink to="/menu">Menu</NavLink></li>
+        <li><NavLink to="/about">About Us</NavLink></li>
+        <li><NavLink to="/contact">Contact</NavLink></li>
       </ul>
       <div className="landing-nav-actions">
-        <div className="cart-icon">
+        <Link to="/cart" className="cart-icon" aria-label="Cart">
             <FaShoppingBag />
             <span className="badge">0</span>
-        </div>
-        <Link to="/login" className="login-btn" style={{ marginRight: '10px', color: '#2d3436', textDecoration: 'none', fontWeight: '500' }}>Login</Link>
+        </Link>
+        <Link to="/login" className="login-btn">Login</Link>
         <Link to="/register" className="signup-btn">Sign Up</Link>
       </div>
     </nav>

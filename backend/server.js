@@ -7,6 +7,7 @@ const { sendPasswordResetEmail } = require('./emailService');
 dotenv.config();
 
 const paymentRoutes = require('./paymentRoutes');
+const additionalMenuItems = require('./additionalMenuItems');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -541,6 +542,8 @@ const menu = [
     image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=900&auto=format&fit=crop',
   },
 ];
+
+menu.push(...additionalMenuItems);
 
 const users = [
   {

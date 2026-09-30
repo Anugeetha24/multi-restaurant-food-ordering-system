@@ -21,12 +21,17 @@ import Favorites from './pages/Favorites';
 import Messages from './pages/Messages';
 import Others from './pages/Others';
 import PublicMenu from './pages/PublicMenu';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Categories from './pages/Categories';
 
 function App() {
   return (
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<PublicLayout><LandingPage /></PublicLayout>} />
+      <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
+      <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -34,6 +39,7 @@ function App() {
       {/* Protected/Dashboard Routes */}
       <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/food-order" element={<FoodOrder />} />
           <Route path="/orders" element={<MyOrders />} />
           <Route path="/myorders" element={<MyOrders />} />
