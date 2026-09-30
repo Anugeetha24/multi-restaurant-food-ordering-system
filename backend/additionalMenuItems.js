@@ -160,6 +160,94 @@ const dessertDescMap = {
   'Choco Chip Cookie': 'Buttery golden cookie loaded with generous dark chocolate chips.',
 };
 
+// Accurate descriptions for each Chinese item
+const chineseDescMap = {
+  'Veg Fried Rice': 'Classic wok-tossed rice with finely chopped seasonal vegetables.',
+  'Chicken Fried Rice': 'Wok-tossed rice with tender chicken chunks and vegetables.',
+  'Egg Fried Rice': 'Flavorful fried rice tossed with scrambled eggs and soy sauce.',
+  'Schezwan Fried Rice': 'Spicy fried rice tossed in fiery home-made Schezwan sauce.',
+  'Chicken Schezwan Fried Rice': 'Spicy Schezwan fried rice loaded with tender chicken pieces.',
+  'Veg Schezwan Fried Rice': 'Perfectly cooked rice tossed with veggies in spicy Schezwan sauce.',
+  'Mushroom Fried Rice': 'Savory fried rice tossed with fresh mushrooms and garlic.',
+  'Paneer Fried Rice': 'Delicious fried rice mixed with soft paneer cubes and veggies.',
+  'Mixed Fried Rice': 'Loaded fried rice with chicken, egg, prawns and vegetables.',
+  'Singapore Fried Rice': 'Spicy, tangy and slightly sweet curry-flavored fried rice.',
+  'Veg Hakka Noodles': 'Classic boiled noodles stir-fried with crunchy vegetables.',
+  'Chicken Hakka Noodles': 'Stir-fried noodles with chicken strips, veggies and soy sauce.',
+  'Egg Hakka Noodles': 'Wok-tossed noodles with scrambled eggs and fresh vegetables.',
+  'Schezwan Noodles': 'Spicy stir-fried noodles tossed in fiery Schezwan sauce.',
+  'Chicken Schezwan Noodles': 'Spicy Schezwan noodles loaded with chicken and veggies.',
+  'Veg Chow Mein': 'Classic Indian-Chinese style stir-fried noodles with veggies.',
+  'Chicken Chow Mein': 'Savory stir-fried noodles with chicken in a rich soy-based sauce.',
+  'Singapore Noodles': 'Thin noodles stir-fried with veggies in a vibrant curry powder.',
+  'Chilli Garlic Noodles': 'Spicy noodles tossed with burnt garlic and fiery chilli flakes.',
+  'Veg Manchurian': 'Deep-fried vegetable balls in a spicy, sweet and tangy dark sauce.',
+  'Chicken Manchurian': 'Fried chicken chunks tossed in a savory and tangy soy-garlic sauce.',
+  'Gobi Manchurian': 'Crispy cauliflower florets tossed in a sweet and spicy sauce.',
+  'Paneer Manchurian': 'Soft paneer cubes stir-fried in a tangy Indo-Chinese sauce.',
+  'Chilli Chicken': 'Classic crispy chicken tossed in a spicy green chilli and soy sauce.',
+  'Chilli Paneer': 'Crispy paneer cubes tossed with peppers in a spicy chilli sauce.',
+  'Chilli Gobi': 'Crispy cauliflower tossed with peppers and onions in a spicy sauce.',
+  'Dragon Chicken': 'Spicy red chicken strips tossed with cashew nuts and bell peppers.',
+  'Garlic Chicken': 'Tender chicken tossed in a savory sauce with an intense garlic flavor.',
+  'Hot Garlic Chicken': 'Chicken tossed in a spicy and pungent hot garlic sauce.',
+  'Pepper Chicken': 'Spicy chicken stir-fry dominated by the bold flavor of black pepper.',
+  'Honey Chicken': 'Crispy chicken pieces coated in a sweet, sticky honey glaze.',
+  'Sweet and Sour Chicken': 'Fried chicken in a vibrant sweet and tangy sauce with pineapples.',
+  'Crispy Chicken': 'Extra crunchy fried chicken strips tossed in a savory asian sauce.',
+  'Crispy Corn': 'Spicy and crunchy deep-fried corn kernels tossed with peppers.',
+  'Spring Rolls': 'Crispy golden rolls stuffed with savory mixed vegetables.',
+  'Vegetable Spring Rolls': 'Golden fried rolls with a finely shredded vegetable filling.',
+  'Chicken Spring Rolls': 'Crispy fried rolls filled with savory minced chicken and veggies.',
+  'Chinese Bhel': 'Crispy fried noodles tossed with fresh veggies in Schezwan sauce.',
+  'American Chopsuey': 'Crispy fried noodles topped with a sweet and tangy vegetable sauce.',
+  'Chicken American Chopsuey': 'Crispy noodles topped with chicken in a sweet and tangy sauce.',
+};
+
+// Image map for Chinese items
+const chineseImageMap = {
+  'Veg Fried Rice': 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900&auto=format&fit=crop',
+  'Chicken Fried Rice': 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900&auto=format&fit=crop',
+  'Egg Fried Rice': 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900&auto=format&fit=crop',
+  'Schezwan Fried Rice': 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900&auto=format&fit=crop',
+  'Chicken Schezwan Fried Rice': 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900&auto=format&fit=crop',
+  'Veg Schezwan Fried Rice': 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900&auto=format&fit=crop',
+  'Mushroom Fried Rice': 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900&auto=format&fit=crop',
+  'Paneer Fried Rice': 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900&auto=format&fit=crop',
+  'Mixed Fried Rice': 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=900&auto=format&fit=crop',
+  'Singapore Fried Rice': 'https://images.unsplash.com/photo-1562565652-a8e8f85f57dd?w=900&auto=format&fit=crop',
+  'Veg Hakka Noodles': 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=900&auto=format&fit=crop',
+  'Chicken Hakka Noodles': 'https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=900&auto=format&fit=crop',
+  'Egg Hakka Noodles': 'https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=900&auto=format&fit=crop',
+  'Schezwan Noodles': 'https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=900&auto=format&fit=crop',
+  'Chicken Schezwan Noodles': 'https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=900&auto=format&fit=crop',
+  'Veg Chow Mein': 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=900&auto=format&fit=crop',
+  'Chicken Chow Mein': 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=900&auto=format&fit=crop',
+  'Singapore Noodles': 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=900&auto=format&fit=crop',
+  'Chilli Garlic Noodles': 'https://images.unsplash.com/photo-1552611052-3ba9d45c65fa?w=900&auto=format&fit=crop',
+  'Veg Manchurian': 'https://images.unsplash.com/photo-1605335123908-41d1a6e9a9ef?w=900&auto=format&fit=crop',
+  'Chicken Manchurian': 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=900&auto=format&fit=crop',
+  'Gobi Manchurian': 'https://images.unsplash.com/photo-1615486171447-ad3cd5eefd7a?w=900&auto=format&fit=crop',
+  'Paneer Manchurian': 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=900&auto=format&fit=crop',
+  'Chilli Chicken': 'https://images.unsplash.com/photo-1525755673019-35de6fd41443?w=900&auto=format&fit=crop',
+  'Chilli Paneer': 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=900&auto=format&fit=crop',
+  'Chilli Gobi': 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=900&auto=format&fit=crop',
+  'Dragon Chicken': 'https://images.unsplash.com/photo-1525755673019-35de6fd41443?w=900&auto=format&fit=crop',
+  'Garlic Chicken': 'https://images.unsplash.com/photo-1623653387945-2fd256d475ce?w=900&auto=format&fit=crop',
+  'Hot Garlic Chicken': 'https://images.unsplash.com/photo-1623653387945-2fd256d475ce?w=900&auto=format&fit=crop',
+  'Pepper Chicken': 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=900&auto=format&fit=crop',
+  'Honey Chicken': 'https://images.unsplash.com/photo-1525755673019-35de6fd41443?w=900&auto=format&fit=crop',
+  'Sweet and Sour Chicken': 'https://images.unsplash.com/photo-1525755673019-35de6fd41443?w=900&auto=format&fit=crop',
+  'Crispy Chicken': 'https://images.unsplash.com/photo-1626200419199-391ae4be7a41?w=900&auto=format&fit=crop',
+  'Crispy Corn': 'https://images.unsplash.com/photo-1626200419199-391ae4be7a41?w=900&auto=format&fit=crop',
+  'Spring Rolls': 'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=900&auto=format&fit=crop',
+  'Vegetable Spring Rolls': 'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=900&auto=format&fit=crop',
+  'Chicken Spring Rolls': 'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=900&auto=format&fit=crop',
+  'Chinese Bhel': 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=900&auto=format&fit=crop',
+  'American Chopsuey': 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=900&auto=format&fit=crop',
+  'Chicken American Chopsuey': 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=900&auto=format&fit=crop',
+};
+
 const categoryItems = {
   Biryani: [
     ['Chicken Biryani', 180], ['Mutton Biryani', 260], ['Egg Biryani', 140], ['Fish Biryani', 240],
@@ -228,9 +316,15 @@ const categoryItems = {
   ],
   Chinese: [
     ['Veg Fried Rice', 140], ['Chicken Fried Rice', 180], ['Egg Fried Rice', 160], ['Schezwan Fried Rice', 170],
-    ['Veg Noodles', 130], ['Chicken Noodles', 180], ['Hakka Noodles', 150], ['Schezwan Noodles', 170],
-    ['Gobi Manchurian', 150], ['Chicken Manchurian', 210], ['Paneer Manchurian', 180], ['Chilli Chicken', 220],
-    ['Chilli Paneer', 180], ['Spring Rolls', 130], ['Dragon Chicken', 240],
+    ['Chicken Schezwan Fried Rice', 190], ['Veg Schezwan Fried Rice', 160], ['Mushroom Fried Rice', 170], ['Paneer Fried Rice', 180],
+    ['Mixed Fried Rice', 210], ['Singapore Fried Rice', 200], ['Veg Hakka Noodles', 140], ['Chicken Hakka Noodles', 180],
+    ['Egg Hakka Noodles', 160], ['Schezwan Noodles', 150], ['Chicken Schezwan Noodles', 190], ['Veg Chow Mein', 140],
+    ['Chicken Chow Mein', 180], ['Singapore Noodles', 200], ['Chilli Garlic Noodles', 160], ['Veg Manchurian', 140],
+    ['Chicken Manchurian', 210], ['Gobi Manchurian', 150], ['Paneer Manchurian', 180], ['Chilli Chicken', 220],
+    ['Chilli Paneer', 180], ['Chilli Gobi', 150], ['Dragon Chicken', 240], ['Garlic Chicken', 230],
+    ['Hot Garlic Chicken', 240], ['Pepper Chicken', 230], ['Honey Chicken', 240], ['Sweet and Sour Chicken', 230],
+    ['Crispy Chicken', 250], ['Crispy Corn', 160], ['Spring Rolls', 130], ['Vegetable Spring Rolls', 130],
+    ['Chicken Spring Rolls', 160], ['Chinese Bhel', 140], ['American Chopsuey', 190], ['Chicken American Chopsuey', 220],
   ],
   'Fast Food': [
     ['Veg Burger', 120], ['Chicken Burger', 160], ['Cheese Burger', 150], ['Paneer Burger', 150],
@@ -253,7 +347,9 @@ const additionalMenuItems = Object.entries(categoryItems).flatMap(([category, it
   category,
   description: category === 'Desserts' && dessertDescMap[name]
     ? dessertDescMap[name]
-    : `${name} prepared with fresh ingredients and traditional flavors.`,
+    : category === 'Chinese' && chineseDescMap[name]
+      ? chineseDescMap[name]
+      : `${name} prepared with fresh ingredients and traditional flavors.`,
   price,
   image: category === 'Biryani'
     ? `/biryani/${index + 1}.jpg`
@@ -267,7 +363,9 @@ const additionalMenuItems = Object.entries(categoryItems).flatMap(([category, it
             ? `/beverages/${index + 1}.jpg`
             : category === 'Desserts' && dessertImageMap[name]
               ? dessertImageMap[name]
-              : category === 'Fast Food' && name === 'Paneer Burger'
+              : category === 'Chinese' && chineseImageMap[name]
+                ? chineseImageMap[name]
+                : category === 'Fast Food' && name === 'Paneer Burger'
                 ? '/fast-food/paneer-burger.jpg'
                 : category === 'Fast Food' && name === 'Paneer Wrap'
                   ? '/fast-food/paneer-wrap.jpg'
